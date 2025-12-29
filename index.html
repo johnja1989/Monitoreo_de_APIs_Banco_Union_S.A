@@ -43,6 +43,19 @@
             gap: 15px;
         }
 
+        .bank-logo {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            font-weight: bold;
+        }
+
         h1 {
             color: #2d3748;
             font-size: 24px;
@@ -91,6 +104,35 @@
             color: #721c24;
         }
 
+        .management-section {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+        }
+
+        .management-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .management-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2d3748;
+        }
+
+        .management-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
         .filters {
             background: white;
             padding: 20px;
@@ -115,7 +157,7 @@
             font-size: 14px;
         }
 
-        select, button {
+        select, input, button {
             padding: 10px 15px;
             border: 2px solid #e2e8f0;
             border-radius: 8px;
@@ -123,6 +165,10 @@
             cursor: pointer;
             transition: all 0.3s;
             background: white;
+        }
+
+        input {
+            cursor: text;
         }
 
         select:hover, button:hover {
@@ -139,6 +185,18 @@
         button:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #48bb78;
+        }
+
+        .btn-danger {
+            background: #f56565;
+        }
+
+        .btn-info {
+            background: #4299e1;
         }
 
         .metrics-grid {
@@ -204,8 +262,8 @@
             padding: 20px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.1);
             transition: all 0.3s;
-            cursor: pointer;
             border-left: 5px solid;
+            position: relative;
         }
 
         .api-card:hover {
@@ -225,11 +283,37 @@
             border-left-color: #f56565;
         }
 
+        .api-actions {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            gap: 5px;
+        }
+
+        .api-action-btn {
+            padding: 5px 10px;
+            font-size: 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            border: none;
+            color: white;
+        }
+
+        .edit-btn {
+            background: #4299e1;
+        }
+
+        .delete-btn {
+            background: #f56565;
+        }
+
         .api-header {
             display: flex;
             justify-content: space-between;
             align-items: start;
             margin-bottom: 15px;
+            margin-right: 100px;
         }
 
         .api-name {
@@ -277,6 +361,103 @@
             font-size: 16px;
             font-weight: bold;
             color: #2d3748;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalSlideIn 0.3s;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2d3748;
+        }
+
+        .modal-close {
+            font-size: 28px;
+            color: #a0aec0;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+            font-family: monospace;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 25px;
         }
 
         .charts-section {
@@ -444,6 +625,37 @@
             font-weight: bold;
         }
 
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #718096;
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .empty-state-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .empty-state-message {
+            font-size: 16px;
+            margin-bottom: 25px;
+        }
+
+        .download-template {
+            color: #667eea;
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
         @media (max-width: 768px) {
             header {
                 text-align: center;
@@ -458,7 +670,7 @@
                 width: 100%;
             }
 
-            .filters {
+            .filters, .management-actions {
                 flex-direction: column;
             }
 
@@ -470,6 +682,10 @@
                 left: 20px;
                 right: 20px;
                 max-width: none;
+            }
+
+            .modal-content {
+                padding: 20px;
             }
         }
 
@@ -497,19 +713,38 @@
             to { transform: rotate(360deg); }
         }
 
-        footer {
+        .file-upload {
+            border: 2px dashed #cbd5e0;
+            border-radius: 8px;
+            padding: 30px;
             text-align: center;
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid #ddd;
-            color: #7f8c8d;
-            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
         }
-        
-        .footer-logo {
-            height: 30px;
+
+        .file-upload:hover {
+            border-color: #667eea;
+            background: #f7fafc;
+        }
+
+        .file-upload input[type="file"] {
+            display: none;
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .upload-text {
+            font-size: 16px;
+            color: #4a5568;
             margin-bottom: 10px;
-            opacity: 0.8;
+        }
+
+        .upload-hint {
+            font-size: 13px;
+            color: #a0aec0;
         }
     </style>
 </head>
@@ -519,7 +754,7 @@
     <div class="container">
         <header>
             <div class="header-title">
-                <img src="LOGO.png" alt="Banco Unión S.A." style="height: 50px;">
+                <div class="bank-logo">BU</div>
                 <div>
                     <h1>Monitoreo de APIs - Banco Unión S.A.</h1>
                     <div style="font-size: 13px; color: #718096; margin-top: 5px;">
@@ -546,6 +781,18 @@
                 </div>
             </div>
         </header>
+
+        <div class="management-section">
+            <div class="management-header">
+                <div class="management-title">Gestión de APIs</div>
+                <div class="management-actions">
+                    <button class="btn-secondary" onclick="openAddModal()">➕ Agregar API</button>
+                    <button class="btn-info" onclick="openImportModal()">📤 Importar Masivo</button>
+                    <button class="btn-danger" onclick="exportAPIs()">📥 Exportar APIs</button>
+                    <button onclick="openTemplateInfo()">📋 Ver Template</button>
+                </div>
+            </div>
+        </div>
 
         <div class="filters">
             <div class="filter-group">
@@ -602,10 +849,10 @@
                 </div>
             </div>
             <div class="metric-card">
-                <div class="metric-label">Incidentes Activos</div>
-                <div class="metric-value" id="activeIncidents">2</div>
-                <div class="metric-trend trend-down">
-                    ↑ 1 nuevo incidente
+                <div class="metric-label">Total de APIs</div>
+                <div class="metric-value" id="totalAPIs">0</div>
+                <div class="metric-trend">
+                    APIs registradas
                 </div>
             </div>
         </div>
@@ -633,24 +880,137 @@
             <div class="incidents-header">Historial de Incidentes</div>
             <div id="incidentsList"></div>
         </div>
+    </div>
 
-        <footer>
-            <img src="LOGO.png" alt="Banco Unión S.A." class="footer-logo">
-            <p><strong>Banco Unión S.A.</strong> - Monitoreo de APIs | Versión 1.0</p>
-            <p style="margin-top: 10px; font-size: 0.8rem; color: #95a5a6;">© 2025 Banco Unión S.A. - Todos los derechos reservados</p>
-        </footer>
-    
+    <div class="modal" id="apiModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="modalTitle">Agregar Nueva API</div>
+                <button class="modal-close" onclick="closeModal('apiModal')">×</button>
+            </div>
+            <form id="apiForm" onsubmit="saveAPI(event)">
+                <input type="hidden" id="apiId">
+                <div class="form-group">
+                    <label>Nombre de la API *</label>
+                    <input type="text" id="apiName" required placeholder="Ej: API de Autenticación">
+                </div>
+                <div class="form-group">
+                    <label>URL del Endpoint *</label>
+                    <input type="url" id="apiUrl" required placeholder="https://api.bancounion.com/auth">
+                </div>
+                <div class="form-group">
+                    <label>Tipo de API *</label>
+                    <select id="apiType" required>
+                        <option value="">Seleccione...</option>
+                        <option value="rest">REST</option>
+                        <option value="soap">SOAP</option>
+                        <option value="graphql">GraphQL</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Criticidad *</label>
+                    <select id="apiCriticality" required>
+                        <option value="">Seleccione...</option>
+                        <option value="critical">Crítica</option>
+                        <option value="high">Alta</option>
+                        <option value="medium">Media</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Descripción</label>
+                    <input type="text" id="apiDescription" placeholder="Descripción breve de la API">
+                </div>
+                <div class="form-actions">
+                    <button type="button" onclick="closeModal('apiModal')">Cancelar</button>
+                    <button type="submit" class="btn-secondary">Guardar API</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="importModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Importar APIs Masivamente</div>
+                <button class="modal-close" onclick="closeModal('importModal')">×</button>
+            </div>
+            
+            <div class="file-upload" onclick="document.getElementById('fileInput').click()">
+                <input type="file" id="fileInput" accept=".json,.csv" onchange="handleFileUpload(event)">
+                <div class="upload-icon">📁</div>
+                <div class="upload-text">Haz clic para seleccionar archivo</div>
+                <div class="upload-hint">Soporta JSON y CSV (máx. 5MB)</div>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <a class="download-template" onclick="downloadTemplate('json')">📄 Descargar template JSON</a> | 
+                <a class="download-template" onclick="downloadTemplate('csv')">📄 Descargar template CSV</a>
+            </div>
+
+            <div class="form-group" style="margin-top: 25px;">
+                <label>O pega el JSON directamente:</label>
+                <textarea id="jsonInput" placeholder='[{"name":"API de Pagos","url":"https://api.example.com","type":"rest","criticality":"critical"}]'></textarea>
+            </div>
+
+            <div class="form-actions">
+                <button onclick="closeModal('importModal')">Cancelar</button>
+                <button class="btn-secondary" onclick="processJSONImport()">Importar JSON</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="templateModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Formato de Importación</div>
+                <button class="modal-close" onclick="closeModal('templateModal')">×</button>
+            </div>
+            <div style="background: #f7fafc; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                <h3 style="margin-bottom: 15px; color: #2d3748;">Formato JSON:</h3>
+                <pre style="background: white; padding: 15px; border-radius: 5px; overflow-x: auto; font-size: 13px;">[
+  {
+    "name": "API de Autenticación",
+    "url": "https://api.bancounion.com/auth",
+    "type": "rest",
+    "criticality": "critical",
+    "description": "API para autenticación de usuarios"
+  },
+  {
+    "name": "API de Transacciones",
+    "url": "https://api.bancounion.com/transactions",
+    "type": "rest",
+    "criticality": "critical",
+    "description": "API para procesar transacciones"
+  }
+]</pre>
+            </div>
+            <div style="background: #f7fafc; padding: 20px; border-radius: 8px;">
+                <h3 style="margin-bottom: 15px; color: #2d3748;">Formato CSV:</h3>
+                <pre style="background: white; padding: 15px; border-radius: 5px; overflow-x: auto; font-size: 13px;">name,url,type,criticality,description
+API de Autenticación,https://api.bancounion.com/auth,rest,critical,API para autenticación
+API de Transacciones,https://api.bancounion.com/transactions,rest,critical,API para transacciones</pre>
+            </div>
+            <div style="margin-top: 20px; padding: 15px; background: #fff3cd; border-radius: 8px; color: #856404;">
+                <strong>Campos requeridos:</strong> name, url, type, criticality<br>
+                <strong>Tipos válidos:</strong> rest, soap, graphql<br>
+                <strong>Criticidad válida:</strong> critical, high, medium
+            </div>
+            <div class="form-actions">
+                <button onclick="closeModal('templateModal')">Cerrar</button>
+            </div>
+        </div>
     </div>
 
     <script>
-        // Datos simulados de APIs
         let apis = [
             {
                 id: 1,
                 name: 'API de Autenticación',
-                type: 'REST',
+                url: 'https://api.bancounion.com/auth',
+                type: 'rest',
                 status: 'operational',
                 criticality: 'critical',
+                description: 'API para autenticación de usuarios',
                 responseTime: 85,
                 uptime: 99.9,
                 errorRate: 0.05,
@@ -659,142 +1019,57 @@
             {
                 id: 2,
                 name: 'API de Transacciones',
-                type: 'REST',
+                url: 'https://api.bancounion.com/transactions',
+                type: 'rest',
                 status: 'operational',
                 criticality: 'critical',
+                description: 'API para procesar transacciones',
                 responseTime: 120,
                 uptime: 99.8,
                 errorRate: 0.08,
                 latency: 115
-            },
-            {
-                id: 3,
-                name: 'API de Consulta de Saldos',
-                type: 'REST',
-                status: 'degraded',
-                criticality: 'high',
-                responseTime: 350,
-                uptime: 98.5,
-                errorRate: 1.2,
-                latency: 340
-            },
-            {
-                id: 4,
-                name: 'API de Transferencias',
-                type: 'SOAP',
-                status: 'operational',
-                criticality: 'critical',
-                responseTime: 180,
-                uptime: 99.7,
-                errorRate: 0.15,
-                latency: 175
-            },
-            {
-                id: 5,
-                name: 'API de Pagos',
-                type: 'REST',
-                status: 'operational',
-                criticality: 'critical',
-                responseTime: 95,
-                uptime: 99.9,
-                errorRate: 0.06,
-                latency: 92
-            },
-            {
-                id: 6,
-                name: 'API de Clientes',
-                type: 'GraphQL',
-                status: 'down',
-                criticality: 'high',
-                responseTime: 0,
-                uptime: 95.2,
-                errorRate: 100,
-                latency: 0
-            },
-            {
-                id: 7,
-                name: 'API de Notificaciones',
-                type: 'REST',
-                status: 'operational',
-                criticality: 'medium',
-                responseTime: 65,
-                uptime: 99.5,
-                errorRate: 0.25,
-                latency: 62
-            },
-            {
-                id: 8,
-                name: 'API de Reportes',
-                type: 'REST',
-                status: 'operational',
-                criticality: 'medium',
-                responseTime: 450,
-                uptime: 99.3,
-                errorRate: 0.35,
-                latency: 445
             }
         ];
 
-        let incidents = [
-            {
-                id: 1,
-                title: 'API de Clientes no responde',
-                api: 'API de Clientes',
-                status: 'active',
-                severity: 'critical',
-                startTime: '2025-12-29 14:30',
-                duration: '45 min'
-            },
-            {
-                id: 2,
-                title: 'Latencia elevada en API de Consulta de Saldos',
-                api: 'API de Consulta de Saldos',
-                status: 'active',
-                severity: 'warning',
-                startTime: '2025-12-29 15:00',
-                duration: '15 min'
-            },
-            {
-                id: 3,
-                title: 'Timeout intermitente en API de Transacciones',
-                api: 'API de Transacciones',
-                status: 'resolved',
-                severity: 'warning',
-                startTime: '2025-12-29 10:15',
-                duration: '1h 20min',
-                resolvedTime: '2025-12-29 11:35'
-            },
-            {
-                id: 4,
-                title: 'Mantenimiento programado API de Reportes',
-                api: 'API de Reportes',
-                status: 'resolved',
-                severity: 'info',
-                startTime: '2025-12-28 22:00',
-                duration: '2h',
-                resolvedTime: '2025-12-29 00:00'
-            }
-        ];
-
-        let currentFilters = {
-            status: 'all',
-            type: 'all',
-            criticality: 'all'
-        };
-
+        let incidents = [];
+        let currentFilters = { status: 'all', type: 'all', criticality: 'all' };
         let charts = {};
         let notificationId = 0;
+        let nextApiId = 3;
 
         function init() {
+            loadAPIsFromStorage();
             updateLastUpdateTime();
             renderAPIs();
             renderIncidents();
             updateStatusCounts();
             initCharts();
-            
-            // Simular actualizaciones en tiempo real
             setInterval(simulateRealTimeUpdates, 10000);
             setInterval(updateLastUpdateTime, 1000);
+        }
+
+        async function loadAPIsFromStorage() {
+            try {
+                const result = await window.storage.get('banco-union-apis');
+                if (result && result.value) {
+                    const data = JSON.parse(result.value);
+                    apis = data.apis || apis;
+                    nextApiId = data.nextId || nextApiId;
+                }
+            } catch (error) {
+                console.log('Usando datos de ejemplo');
+            }
+        }
+
+        async function saveAPIsToStorage() {
+            try {
+                await window.storage.set('banco-union-apis', JSON.stringify({
+                    apis: apis,
+                    nextId: nextApiId
+                }));
+            } catch (error) {
+                console.error('Error al guardar:', error);
+            }
         }
 
         function updateLastUpdateTime() {
@@ -811,12 +1086,31 @@
                 return true;
             });
 
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1;">
+                        <div class="empty-state-icon">🔍</div>
+                        <div class="empty-state-title">No se encontraron APIs</div>
+                        <div class="empty-state-message">
+                            ${apis.length === 0 ? 'Comienza agregando tu primera API o importa múltiples APIs.' : 'Intenta ajustar los filtros.'}
+                        </div>
+                        ${apis.length === 0 ? '<button onclick="openAddModal()" class="btn-secondary">➕ Agregar Primera API</button>' : ''}
+                    </div>
+                `;
+                return;
+            }
+
             grid.innerHTML = filtered.map(api => `
-                <div class="api-card ${api.status}" onclick="showAPIDetails(${api.id})">
+                <div class="api-card ${api.status}">
+                    <div class="api-actions">
+                        <button class="api-action-btn edit-btn" onclick="openEditModal(${api.id})">✏️ Editar</button>
+                        <button class="api-action-btn delete-btn" onclick="deleteAPI(${api.id})">🗑️</button>
+                    </div>
                     <div class="api-header">
                         <div>
                             <div class="api-name">${api.name}</div>
-                            <div class="api-type">${api.type} · ${api.criticality}</div>
+                            <div class="api-type">${api.type.toUpperCase()} · ${api.criticality}</div>
+                            ${api.description ? `<div style="font-size: 12px; color: #718096; margin-top: 5px;">${api.description}</div>` : ''}
                         </div>
                         <div class="api-status-badge ${api.status === 'operational' ? 'status-operational' : api.status === 'degraded' ? 'status-degraded' : 'status-down'}">
                             ${api.status === 'operational' ? 'Operacional' : api.status === 'degraded' ? 'Degradado' : 'Caído'}
@@ -846,6 +1140,10 @@
 
         function renderIncidents() {
             const list = document.getElementById('incidentsList');
+            if (incidents.length === 0) {
+                list.innerHTML = '<div style="text-align: center; color: #718096; padding: 20px;">No hay incidentes registrados</div>';
+                return;
+            }
             list.innerHTML = incidents.map(incident => `
                 <div class="incident-item ${incident.status}">
                     <div class="incident-title">${incident.title}</div>
@@ -864,23 +1162,20 @@
             const operational = apis.filter(api => api.status === 'operational').length;
             const degraded = apis.filter(api => api.status === 'degraded').length;
             const down = apis.filter(api => api.status === 'down').length;
-
             document.getElementById('operationalCount').textContent = operational;
             document.getElementById('degradedCount').textContent = degraded;
             document.getElementById('downCount').textContent = down;
+            document.getElementById('totalAPIs').textContent = apis.length;
         }
 
         function initCharts() {
-            // Datos históricos simulados
             const labels = [];
             for (let i = 23; i >= 0; i--) {
                 labels.push(`${i}h`);
             }
-
             const responseTimeData = Array.from({length: 24}, () => Math.floor(Math.random() * 100) + 80);
             const errorRateData = Array.from({length: 24}, () => (Math.random() * 0.5).toFixed(2));
 
-            // Gráfico de tiempo de respuesta
             const ctx1 = document.getElementById('responseTimeChart').getContext('2d');
             charts.responseTime = new Chart(ctx1, {
                 type: 'line',
@@ -898,21 +1193,11 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'top'
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
+                    plugins: { legend: { display: true, position: 'top' } },
+                    scales: { y: { beginAtZero: true } }
                 }
             });
 
-            // Gráfico de tasa de error
             const ctx2 = document.getElementById('errorRateChart').getContext('2d');
             charts.errorRate = new Chart(ctx2, {
                 type: 'bar',
@@ -929,35 +1214,21 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'top'
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
+                    plugins: { legend: { display: true, position: 'top' } },
+                    scales: { y: { beginAtZero: true } }
                 }
             });
         }
 
         function simulateRealTimeUpdates() {
-            // Simular cambios aleatorios en las APIs
+            if (apis.length === 0) return;
             const randomApi = apis[Math.floor(Math.random() * apis.length)];
             const oldStatus = randomApi.status;
-            
-            // Pequeñas variaciones en métricas
             randomApi.responseTime += Math.floor(Math.random() * 20) - 10;
             randomApi.responseTime = Math.max(50, Math.min(500, randomApi.responseTime));
-            
-            // Ocasionalmente cambiar el estado
             if (Math.random() > 0.9) {
                 const statuses = ['operational', 'degraded'];
                 randomApi.status = statuses[Math.floor(Math.random() * statuses.length)];
-                
                 if (oldStatus !== randomApi.status) {
                     showNotification(
                         randomApi.status === 'operational' ? 'success' : 'warning',
@@ -966,7 +1237,7 @@
                     );
                 }
             }
-
+            saveAPIsToStorage();
             renderAPIs();
             updateStatusCounts();
         }
@@ -974,12 +1245,7 @@
         function showNotification(type, title, message) {
             const container = document.getElementById('notifications');
             const id = ++notificationId;
-            const icons = {
-                error: '❌',
-                warning: '⚠️',
-                success: '✅'
-            };
-
+            const icons = { error: '❌', warning: '⚠️', success: '✅' };
             const notification = document.createElement('div');
             notification.className = `notification ${type}`;
             notification.id = `notification-${id}`;
@@ -991,9 +1257,7 @@
                 </div>
                 <div class="notification-close" onclick="closeNotification(${id})">×</div>
             `;
-
             container.appendChild(notification);
-
             setTimeout(() => closeNotification(id), 8000);
         }
 
@@ -1023,17 +1287,257 @@
         function changeTimeRange(range) {
             document.querySelectorAll('.time-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
-            
-            // Aquí podrías actualizar los gráficos con diferentes rangos de tiempo
-            showNotification('success', 'Rango de Tiempo Actualizado', `Mostrando datos de ${range}`);
+            showNotification('success', 'Rango Actualizado', `Mostrando datos de ${range}`);
         }
 
-        function showAPIDetails(apiId) {
+        function openAddModal() {
+            document.getElementById('modalTitle').textContent = 'Agregar Nueva API';
+            document.getElementById('apiForm').reset();
+            document.getElementById('apiId').value = '';
+            openModal('apiModal');
+        }
+
+        function openEditModal(apiId) {
             const api = apis.find(a => a.id === apiId);
-            showNotification('success', 'Detalles de API', `Mostrando detalles de ${api.name}`);
+            if (!api) return;
+            document.getElementById('modalTitle').textContent = 'Editar API';
+            document.getElementById('apiId').value = api.id;
+            document.getElementById('apiName').value = api.name;
+            document.getElementById('apiUrl').value = api.url;
+            document.getElementById('apiType').value = api.type;
+            document.getElementById('apiCriticality').value = api.criticality;
+            document.getElementById('apiDescription').value = api.description || '';
+            openModal('apiModal');
         }
 
-        // Inicializar la aplicación
+        function openImportModal() {
+            document.getElementById('jsonInput').value = '';
+            document.getElementById('fileInput').value = '';
+            openModal('importModal');
+        }
+
+        function openTemplateInfo() {
+            openModal('templateModal');
+        }
+
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function saveAPI(event) {
+            event.preventDefault();
+            const id = document.getElementById('apiId').value;
+            const apiData = {
+                name: document.getElementById('apiName').value,
+                url: document.getElementById('apiUrl').value,
+                type: document.getElementById('apiType').value,
+                criticality: document.getElementById('apiCriticality').value,
+                description: document.getElementById('apiDescription').value,
+                status: 'operational',
+                responseTime: Math.floor(Math.random() * 200) + 50,
+                uptime: parseFloat((99.5 + Math.random() * 0.5).toFixed(1)),
+                errorRate: parseFloat((Math.random() * 0.5).toFixed(2)),
+                latency: Math.floor(Math.random() * 200) + 50
+            };
+
+            if (id) {
+                const index = apis.findIndex(a => a.id === parseInt(id));
+                if (index !== -1) {
+                    apis[index] = { ...apis[index], ...apiData };
+                    showNotification('success', 'API Actualizada', `${apiData.name} actualizada`);
+                }
+            } else {
+                apiData.id = nextApiId++;
+                apis.push(apiData);
+                showNotification('success', 'API Agregada', `${apiData.name} agregada`);
+            }
+            saveAPIsToStorage();
+            renderAPIs();
+            updateStatusCounts();
+            closeModal('apiModal');
+        }
+
+        function deleteAPI(apiId) {
+            const api = apis.find(a => a.id === apiId);
+            if (!api) return;
+            if (confirm(`¿Eliminar "${api.name}"?`)) {
+                apis = apis.filter(a => a.id !== apiId);
+                saveAPIsToStorage();
+                renderAPIs();
+                updateStatusCounts();
+                showNotification('success', 'API Eliminada', `${api.name} eliminada`);
+            }
+        }
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const content = e.target.result;
+                if (file.name.endsWith('.json')) {
+                    try {
+                        const data = JSON.parse(content);
+                        processImportData(data);
+                    } catch (error) {
+                        showNotification('error', 'Error', 'JSON inválido');
+                    }
+                } else if (file.name.endsWith('.csv')) {
+                    processCSV(content);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function processCSV(csvContent) {
+            const lines = csvContent.trim().split('\n');
+            const headers = lines[0].split(',').map(h => h.trim());
+            const data = [];
+            for (let i = 1; i < lines.length; i++) {
+                const values = lines[i].split(',').map(v => v.trim());
+                const obj = {};
+                headers.forEach((header, index) => {
+                    obj[header] = values[index];
+                });
+                data.push(obj);
+            }
+            processImportData(data);
+        }
+
+        function processImportData(data) {
+            if (!Array.isArray(data)) {
+                showNotification('error', 'Error', 'Debe ser un array');
+                return;
+            }
+            let imported = 0;
+            let errors = 0;
+            data.forEach(item => {
+                if (!item.name || !item.url || !item.type || !item.criticality) {
+                    errors++;
+                    return;
+                }
+                const validTypes = ['rest', 'soap', 'graphql'];
+                const validCriticality = ['critical', 'high', 'medium'];
+                if (!validTypes.includes(item.type.toLowerCase()) || !validCriticality.includes(item.criticality.toLowerCase())) {
+                    errors++;
+                    return;
+                }
+                const newAPI = {
+                    id: nextApiId++,
+                    name: item.name,
+                    url: item.url,
+                    type: item.type.toLowerCase(),
+                    criticality: item.criticality.toLowerCase(),
+                    description: item.description || '',
+                    status: 'operational',
+                    responseTime: Math.floor(Math.random() * 200) + 50,
+                    uptime: parseFloat((99.5 + Math.random() * 0.5).toFixed(1)),
+                    errorRate: parseFloat((Math.random() * 0.5).toFixed(2)),
+                    latency: Math.floor(Math.random() * 200) + 50
+                };
+                apis.push(newAPI);
+                imported++;
+            });
+            saveAPIsToStorage();
+            renderAPIs();
+            updateStatusCounts();
+            closeModal('importModal');
+            if (imported > 0) {
+                showNotification('success', 'Importación Exitosa', `${imported} API(s) importadas${errors > 0 ? `. ${errors} errores` : ''}`);
+            } else {
+                showNotification('error', 'Error', 'No se importó ninguna API');
+            }
+        }
+
+        function processJSONImport() {
+            const jsonText = document.getElementById('jsonInput').value.trim();
+            if (!jsonText) {
+                showNotification('error', 'Error', 'Ingresa un JSON válido');
+                return;
+            }
+            try {
+                const data = JSON.parse(jsonText);
+                processImportData(data);
+            } catch (error) {
+                showNotification('error', 'Error', 'JSON inválido');
+            }
+        }
+
+        function exportAPIs() {
+            const exportData = apis.map(api => ({
+                name: api.name,
+                url: api.url,
+                type: api.type,
+                criticality: api.criticality,
+                description: api.description || '',
+                status: api.status,
+                responseTime: api.responseTime,
+                uptime: api.uptime,
+                errorRate: api.errorRate,
+                latency: api.latency
+            }));
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `banco-union-apis-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            showNotification('success', 'Exportación Exitosa', `${apis.length} API(s) exportadas`);
+        }
+
+        function downloadTemplate(format) {
+            const templateData = [
+                {
+                    name: 'API de Ejemplo 1',
+                    url: 'https://api.bancounion.com/ejemplo1',
+                    type: 'rest',
+                    criticality: 'critical',
+                    description: 'Descripción de ejemplo'
+                },
+                {
+                    name: 'API de Ejemplo 2',
+                    url: 'https://api.bancounion.com/ejemplo2',
+                    type: 'soap',
+                    criticality: 'high',
+                    description: 'Otra descripción'
+                }
+            ];
+            if (format === 'json') {
+                const dataStr = JSON.stringify(templateData, null, 2);
+                const blob = new Blob([dataStr], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'template-apis.json';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+            } else if (format === 'csv') {
+                const headers = 'name,url,type,criticality,description\n';
+                const rows = templateData.map(item => `${item.name},${item.url},${item.type},${item.criticality},${item.description}`).join('\n');
+                const csvContent = headers + rows;
+                const blob = new Blob([csvContent], { type: 'text/csv' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'template-apis.csv';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+            }
+            showNotification('success', 'Template Descargado', `Template ${format.toUpperCase()} descargado`);
+        }
+
         init();
     </script>
 </body>
