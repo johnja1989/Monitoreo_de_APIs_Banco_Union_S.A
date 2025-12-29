@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoreo de APIs - Banco Unión S.A.</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        h1 {
+            color: #2d3748;
+            font-size: 24px;
+        }
+
+        .status-summary {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .status-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .status-operational {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-degraded {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-down {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .filters {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .filter-group label {
+            font-weight: 600;
+            color: #4a5568;
+            font-size: 14px;
+        }
+
+        select, button {
+            padding: 10px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        select:hover, button:hover {
+            border-color: #667eea;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            font-weight: 600;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .metric-label {
+            color: #718096;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .metric-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+
+        .metric-trend {
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .trend-up {
+            color: #48bb78;
+        }
+
+        .trend-down {
+            color: #f56565;
+        }
+
+        .apis-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .api-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+            border-left: 5px solid;
+        }
+
+        .api-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .api-card.operational {
+            border-left-color: #48bb78;
+        }
+
+        .api-card.degraded {
+            border-left-color: #ed8936;
+        }
+
+        .api-card.down {
+            border-left-color: #f56565;
+        }
+
+        .api-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+        }
+
+        .api-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+
+        .api-type {
+            font-size: 12px;
+            color: #718096;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .api-status-badge {
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .api-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .api-metric {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .api-metric-label {
+            font-size: 11px;
+            color: #a0aec0;
+            text-transform: uppercase;
+            margin-bottom: 3px;
+        }
+
+        .api-metric-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2d3748;
+        }
+
+        .charts-section {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+        }
+
+        .charts-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .charts-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2d3748;
+        }
+
+        .time-selector {
+            display: flex;
+            gap: 10px;
+        }
+
+        .time-btn {
+            padding: 8px 15px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            border-radius: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .time-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-bottom: 20px;
+        }
+
+        .incidents-section {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .incidents-header {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 20px;
+        }
+
+        .incident-item {
+            padding: 15px;
+            border-left: 4px solid;
+            background: #f7fafc;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .incident-item.resolved {
+            border-left-color: #48bb78;
+        }
+
+        .incident-item.active {
+            border-left-color: #f56565;
+        }
+
+        .incident-title {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+
+        .incident-details {
+            font-size: 13px;
+            color: #718096;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .notifications {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            max-width: 350px;
+        }
+
+        .notification {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: start;
+            gap: 12px;
+            animation: slideIn 0.3s;
+            border-left: 4px solid;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .notification.error {
+            border-left-color: #f56565;
+        }
+
+        .notification.warning {
+            border-left-color: #ed8936;
+        }
+
+        .notification.success {
+            border-left-color: #48bb78;
+        }
+
+        .notification-icon {
+            font-size: 20px;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 3px;
+            font-size: 14px;
+        }
+
+        .notification-message {
+            font-size: 13px;
+            color: #718096;
+        }
+
+        .notification-close {
+            cursor: pointer;
+            color: #a0aec0;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                text-align: center;
+            }
+
+            .header-title {
+                flex-direction: column;
+            }
+
+            .status-summary {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .filters {
+                flex-direction: column;
+            }
+
+            .apis-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .notifications {
+                left: 20px;
+                right: 20px;
+                max-width: none;
+            }
+        }
+
+        .refresh-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 15px;
+            background: #edf2f7;
+            border-radius: 20px;
+            font-size: 13px;
+            color: #4a5568;
+        }
+
+        .spinner {
+            width: 12px;
+            height: 12px;
+            border: 2px solid #cbd5e0;
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        .footer-logo {
+            height: 30px;
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="notifications" id="notifications"></div>
+
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <img src="LOGO.png" alt="Banco Unión S.A." style="height: 50px;">
+                <div>
+                    <h1>Monitoreo de APIs - Banco Unión S.A.</h1>
+                    <div style="font-size: 13px; color: #718096; margin-top: 5px;">
+                        Última actualización: <span id="lastUpdate"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="status-summary">
+                <div class="status-badge status-operational">
+                    <div class="status-dot" style="background: #48bb78;"></div>
+                    <span id="operationalCount">0</span> Operacionales
+                </div>
+                <div class="status-badge status-degraded">
+                    <div class="status-dot" style="background: #ed8936;"></div>
+                    <span id="degradedCount">0</span> Degradadas
+                </div>
+                <div class="status-badge status-down">
+                    <div class="status-dot" style="background: #f56565;"></div>
+                    <span id="downCount">0</span> Caídas
+                </div>
+                <div class="refresh-indicator">
+                    <div class="spinner"></div>
+                    Actualizando...
+                </div>
+            </div>
+        </header>
+
+        <div class="filters">
+            <div class="filter-group">
+                <label>Estado:</label>
+                <select id="statusFilter">
+                    <option value="all">Todos</option>
+                    <option value="operational">Operacional</option>
+                    <option value="degraded">Degradado</option>
+                    <option value="down">Caído</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Tipo:</label>
+                <select id="typeFilter">
+                    <option value="all">Todos</option>
+                    <option value="rest">REST</option>
+                    <option value="soap">SOAP</option>
+                    <option value="graphql">GraphQL</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Criticidad:</label>
+                <select id="criticalityFilter">
+                    <option value="all">Todas</option>
+                    <option value="critical">Crítica</option>
+                    <option value="high">Alta</option>
+                    <option value="medium">Media</option>
+                </select>
+            </div>
+            <button onclick="applyFilters()">Aplicar Filtros</button>
+            <button onclick="resetFilters()">Resetear</button>
+        </div>
+
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-label">Disponibilidad Promedio</div>
+                <div class="metric-value" id="avgUptime">99.8%</div>
+                <div class="metric-trend trend-up">
+                    ↑ 0.3% vs mes anterior
+                </div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Tiempo de Respuesta Promedio</div>
+                <div class="metric-value" id="avgResponse">142ms</div>
+                <div class="metric-trend trend-up">
+                    ↓ 15ms más rápido
+                </div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Tasa de Error</div>
+                <div class="metric-value" id="errorRate">0.12%</div>
+                <div class="metric-trend trend-up">
+                    ↓ 0.05% menos errores
+                </div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Incidentes Activos</div>
+                <div class="metric-value" id="activeIncidents">2</div>
+                <div class="metric-trend trend-down">
+                    ↑ 1 nuevo incidente
+                </div>
+            </div>
+        </div>
+
+        <div class="apis-grid" id="apisGrid"></div>
+
+        <div class="charts-section">
+            <div class="charts-header">
+                <div class="charts-title">Métricas de Desempeño Histórico</div>
+                <div class="time-selector">
+                    <button class="time-btn active" onclick="changeTimeRange('24h')">24h</button>
+                    <button class="time-btn" onclick="changeTimeRange('7d')">7 días</button>
+                    <button class="time-btn" onclick="changeTimeRange('30d')">30 días</button>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="responseTimeChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="errorRateChart"></canvas>
+            </div>
+        </div>
+
+        <div class="incidents-section">
+            <div class="incidents-header">Historial de Incidentes</div>
+            <div id="incidentsList"></div>
+        </div>
+
+        <footer>
+            <img src="LOGO.png" alt="Banco Unión S.A." class="footer-logo">
+            <p><strong>Banco Unión S.A.</strong> - Monitoreo de APIs | Versión 1.0</p>
+            <p style="margin-top: 10px; font-size: 0.8rem; color: #95a5a6;">© 2025 Banco Unión S.A. - Todos los derechos reservados</p>
+        </footer>
+    
+    </div>
+
+    <script>
+        // Datos simulados de APIs
+        let apis = [
+            {
+                id: 1,
+                name: 'API de Autenticación',
+                type: 'REST',
+                status: 'operational',
+                criticality: 'critical',
+                responseTime: 85,
+                uptime: 99.9,
+                errorRate: 0.05,
+                latency: 82
+            },
+            {
+                id: 2,
+                name: 'API de Transacciones',
+                type: 'REST',
+                status: 'operational',
+                criticality: 'critical',
+                responseTime: 120,
+                uptime: 99.8,
+                errorRate: 0.08,
+                latency: 115
+            },
+            {
+                id: 3,
+                name: 'API de Consulta de Saldos',
+                type: 'REST',
+                status: 'degraded',
+                criticality: 'high',
+                responseTime: 350,
+                uptime: 98.5,
+                errorRate: 1.2,
+                latency: 340
+            },
+            {
+                id: 4,
+                name: 'API de Transferencias',
+                type: 'SOAP',
+                status: 'operational',
+                criticality: 'critical',
+                responseTime: 180,
+                uptime: 99.7,
+                errorRate: 0.15,
+                latency: 175
+            },
+            {
+                id: 5,
+                name: 'API de Pagos',
+                type: 'REST',
+                status: 'operational',
+                criticality: 'critical',
+                responseTime: 95,
+                uptime: 99.9,
+                errorRate: 0.06,
+                latency: 92
+            },
+            {
+                id: 6,
+                name: 'API de Clientes',
+                type: 'GraphQL',
+                status: 'down',
+                criticality: 'high',
+                responseTime: 0,
+                uptime: 95.2,
+                errorRate: 100,
+                latency: 0
+            },
+            {
+                id: 7,
+                name: 'API de Notificaciones',
+                type: 'REST',
+                status: 'operational',
+                criticality: 'medium',
+                responseTime: 65,
+                uptime: 99.5,
+                errorRate: 0.25,
+                latency: 62
+            },
+            {
+                id: 8,
+                name: 'API de Reportes',
+                type: 'REST',
+                status: 'operational',
+                criticality: 'medium',
+                responseTime: 450,
+                uptime: 99.3,
+                errorRate: 0.35,
+                latency: 445
+            }
+        ];
+
+        let incidents = [
+            {
+                id: 1,
+                title: 'API de Clientes no responde',
+                api: 'API de Clientes',
+                status: 'active',
+                severity: 'critical',
+                startTime: '2025-12-29 14:30',
+                duration: '45 min'
+            },
+            {
+                id: 2,
+                title: 'Latencia elevada en API de Consulta de Saldos',
+                api: 'API de Consulta de Saldos',
+                status: 'active',
+                severity: 'warning',
+                startTime: '2025-12-29 15:00',
+                duration: '15 min'
+            },
+            {
+                id: 3,
+                title: 'Timeout intermitente en API de Transacciones',
+                api: 'API de Transacciones',
+                status: 'resolved',
+                severity: 'warning',
+                startTime: '2025-12-29 10:15',
+                duration: '1h 20min',
+                resolvedTime: '2025-12-29 11:35'
+            },
+            {
+                id: 4,
+                title: 'Mantenimiento programado API de Reportes',
+                api: 'API de Reportes',
+                status: 'resolved',
+                severity: 'info',
+                startTime: '2025-12-28 22:00',
+                duration: '2h',
+                resolvedTime: '2025-12-29 00:00'
+            }
+        ];
+
+        let currentFilters = {
+            status: 'all',
+            type: 'all',
+            criticality: 'all'
+        };
+
+        let charts = {};
+        let notificationId = 0;
+
+        function init() {
+            updateLastUpdateTime();
+            renderAPIs();
+            renderIncidents();
+            updateStatusCounts();
+            initCharts();
+            
+            // Simular actualizaciones en tiempo real
+            setInterval(simulateRealTimeUpdates, 10000);
+            setInterval(updateLastUpdateTime, 1000);
+        }
+
+        function updateLastUpdateTime() {
+            const now = new Date();
+            document.getElementById('lastUpdate').textContent = now.toLocaleTimeString('es-ES');
+        }
+
+        function renderAPIs() {
+            const grid = document.getElementById('apisGrid');
+            const filtered = apis.filter(api => {
+                if (currentFilters.status !== 'all' && api.status !== currentFilters.status) return false;
+                if (currentFilters.type !== 'all' && api.type !== currentFilters.type) return false;
+                if (currentFilters.criticality !== 'all' && api.criticality !== currentFilters.criticality) return false;
+                return true;
+            });
+
+            grid.innerHTML = filtered.map(api => `
+                <div class="api-card ${api.status}" onclick="showAPIDetails(${api.id})">
+                    <div class="api-header">
+                        <div>
+                            <div class="api-name">${api.name}</div>
+                            <div class="api-type">${api.type} · ${api.criticality}</div>
+                        </div>
+                        <div class="api-status-badge ${api.status === 'operational' ? 'status-operational' : api.status === 'degraded' ? 'status-degraded' : 'status-down'}">
+                            ${api.status === 'operational' ? 'Operacional' : api.status === 'degraded' ? 'Degradado' : 'Caído'}
+                        </div>
+                    </div>
+                    <div class="api-metrics">
+                        <div class="api-metric">
+                            <div class="api-metric-label">Tiempo de Respuesta</div>
+                            <div class="api-metric-value">${api.responseTime}ms</div>
+                        </div>
+                        <div class="api-metric">
+                            <div class="api-metric-label">Disponibilidad</div>
+                            <div class="api-metric-value">${api.uptime}%</div>
+                        </div>
+                        <div class="api-metric">
+                            <div class="api-metric-label">Tasa de Error</div>
+                            <div class="api-metric-value">${api.errorRate}%</div>
+                        </div>
+                        <div class="api-metric">
+                            <div class="api-metric-label">Latencia</div>
+                            <div class="api-metric-value">${api.latency}ms</div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderIncidents() {
+            const list = document.getElementById('incidentsList');
+            list.innerHTML = incidents.map(incident => `
+                <div class="incident-item ${incident.status}">
+                    <div class="incident-title">${incident.title}</div>
+                    <div class="incident-details">
+                        <span><strong>API:</strong> ${incident.api}</span>
+                        <span><strong>Inicio:</strong> ${incident.startTime}</span>
+                        <span><strong>Duración:</strong> ${incident.duration}</span>
+                        ${incident.status === 'resolved' ? `<span><strong>Resuelto:</strong> ${incident.resolvedTime}</span>` : ''}
+                        <span><strong>Estado:</strong> ${incident.status === 'active' ? '🔴 Activo' : '✅ Resuelto'}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateStatusCounts() {
+            const operational = apis.filter(api => api.status === 'operational').length;
+            const degraded = apis.filter(api => api.status === 'degraded').length;
+            const down = apis.filter(api => api.status === 'down').length;
+
+            document.getElementById('operationalCount').textContent = operational;
+            document.getElementById('degradedCount').textContent = degraded;
+            document.getElementById('downCount').textContent = down;
+        }
+
+        function initCharts() {
+            // Datos históricos simulados
+            const labels = [];
+            for (let i = 23; i >= 0; i--) {
+                labels.push(`${i}h`);
+            }
+
+            const responseTimeData = Array.from({length: 24}, () => Math.floor(Math.random() * 100) + 80);
+            const errorRateData = Array.from({length: 24}, () => (Math.random() * 0.5).toFixed(2));
+
+            // Gráfico de tiempo de respuesta
+            const ctx1 = document.getElementById('responseTimeChart').getContext('2d');
+            charts.responseTime = new Chart(ctx1, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Tiempo de Respuesta Promedio (ms)',
+                        data: responseTimeData,
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Gráfico de tasa de error
+            const ctx2 = document.getElementById('errorRateChart').getContext('2d');
+            charts.errorRate = new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Tasa de Error (%)',
+                        data: errorRateData,
+                        backgroundColor: 'rgba(245, 101, 101, 0.6)',
+                        borderColor: '#f56565',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function simulateRealTimeUpdates() {
+            // Simular cambios aleatorios en las APIs
+            const randomApi = apis[Math.floor(Math.random() * apis.length)];
+            const oldStatus = randomApi.status;
+            
+            // Pequeñas variaciones en métricas
+            randomApi.responseTime += Math.floor(Math.random() * 20) - 10;
+            randomApi.responseTime = Math.max(50, Math.min(500, randomApi.responseTime));
+            
+            // Ocasionalmente cambiar el estado
+            if (Math.random() > 0.9) {
+                const statuses = ['operational', 'degraded'];
+                randomApi.status = statuses[Math.floor(Math.random() * statuses.length)];
+                
+                if (oldStatus !== randomApi.status) {
+                    showNotification(
+                        randomApi.status === 'operational' ? 'success' : 'warning',
+                        `Cambio de Estado - ${randomApi.name}`,
+                        `El estado cambió de ${oldStatus} a ${randomApi.status}`
+                    );
+                }
+            }
+
+            renderAPIs();
+            updateStatusCounts();
+        }
+
+        function showNotification(type, title, message) {
+            const container = document.getElementById('notifications');
+            const id = ++notificationId;
+            const icons = {
+                error: '❌',
+                warning: '⚠️',
+                success: '✅'
+            };
+
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.id = `notification-${id}`;
+            notification.innerHTML = `
+                <div class="notification-icon">${icons[type]}</div>
+                <div class="notification-content">
+                    <div class="notification-title">${title}</div>
+                    <div class="notification-message">${message}</div>
+                </div>
+                <div class="notification-close" onclick="closeNotification(${id})">×</div>
+            `;
+
+            container.appendChild(notification);
+
+            setTimeout(() => closeNotification(id), 8000);
+        }
+
+        function closeNotification(id) {
+            const notification = document.getElementById(`notification-${id}`);
+            if (notification) {
+                notification.style.animation = 'slideIn 0.3s reverse';
+                setTimeout(() => notification.remove(), 300);
+            }
+        }
+
+        function applyFilters() {
+            currentFilters.status = document.getElementById('statusFilter').value;
+            currentFilters.type = document.getElementById('typeFilter').value;
+            currentFilters.criticality = document.getElementById('criticalityFilter').value;
+            renderAPIs();
+        }
+
+        function resetFilters() {
+            currentFilters = { status: 'all', type: 'all', criticality: 'all' };
+            document.getElementById('statusFilter').value = 'all';
+            document.getElementById('typeFilter').value = 'all';
+            document.getElementById('criticalityFilter').value = 'all';
+            renderAPIs();
+        }
+
+        function changeTimeRange(range) {
+            document.querySelectorAll('.time-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Aquí podrías actualizar los gráficos con diferentes rangos de tiempo
+            showNotification('success', 'Rango de Tiempo Actualizado', `Mostrando datos de ${range}`);
+        }
+
+        function showAPIDetails(apiId) {
+            const api = apis.find(a => a.id === apiId);
+            showNotification('success', 'Detalles de API', `Mostrando detalles de ${api.name}`);
+        }
+
+        // Inicializar la aplicación
+        init();
+    </script>
+</body>
+</html>
