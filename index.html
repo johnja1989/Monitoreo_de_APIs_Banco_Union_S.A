@@ -1002,35 +1002,6 @@ API de Transacciones,https://api.bancounion.com/transactions,rest,critical,API p
     </div>
 
     <script>
-        let apis = [
-            {
-                id: 1,
-                name: 'API de Autenticación',
-                url: 'https://api.bancounion.com/auth',
-                type: 'rest',
-                status: 'operational',
-                criticality: 'critical',
-                description: 'API para autenticación de usuarios',
-                responseTime: 85,
-                uptime: 99.9,
-                errorRate: 0.05,
-                latency: 82
-            },
-            {
-                id: 2,
-                name: 'API de Transacciones',
-                url: 'https://api.bancounion.com/transactions',
-                type: 'rest',
-                status: 'operational',
-                criticality: 'critical',
-                description: 'API para procesar transacciones',
-                responseTime: 120,
-                uptime: 99.8,
-                errorRate: 0.08,
-                latency: 115
-            }
-        ];
-
         let incidents = [];
         let currentFilters = { status: 'all', type: 'all', criticality: 'all' };
         let charts = {};
@@ -1542,3 +1513,4 @@ API de Transacciones,https://api.bancounion.com/transactions,rest,critical,API p
     </script>
 </body>
 </html>
+
